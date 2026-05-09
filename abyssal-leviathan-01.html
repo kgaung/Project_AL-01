@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Into the Rift — Abyssal Leviathan-01 | KANEDEV Marine Systems</title>
+<meta name="description" content="Mission report and specification document for Abyssal Leviathan-01, KANEDEV's biomimetic deep-sea research submersible.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300..700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Work Sans', 'Helvetica Neue', sans-serif;
+  --text-xs:   clamp(0.75rem,  0.7rem + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem,   1.2rem + 1.25vw, 2.25rem);
+  --text-2xl:  clamp(2rem,     1.2rem + 2.5vw, 3.5rem);
+  --text-3xl:  clamp(2.5rem,   1rem + 4vw, 5rem);
+  --space-1:.25rem; --space-2:.5rem; --space-3:.75rem; --space-4:1rem;
+  --space-5:1.25rem; --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem;
+  --space-12:3rem; --space-16:4rem; --space-20:5rem; --space-24:6rem;
+  --radius-sm:.375rem; --radius-md:.5rem; --radius-lg:.75rem;
+  --radius-xl:1rem; --radius-full:9999px;
+  --transition-interactive: 180ms cubic-bezier(0.16,1,0.3,1);
+  --content-default: 860px; --content-wide: 1200px;
+}
+
+/* DARK MODE (default) */
+:root, [data-theme="dark"] {
+  --color-bg:#0b0e12; --color-surface:#111418; --color-surface-2:#161b22;
+  --color-surface-offset:#1c2230; --color-divider:#222a38; --color-border:#2a3447;
+  --color-text:#e2e8f0; --color-text-muted:#7d8fa8; --color-text-faint:#3d4f66;
+  --color-text-inverse:#0b0e12;
+  --color-primary:#38bdf8; --color-primary-hover:#0ea5e9; --color-primary-active:#0284c7;
+  --color-primary-highlight:#0f2233;
+  --color-gold:#fbbf24;
+  --shadow-sm:0 1px 2px oklch(0 0 0/.3);
+  --shadow-md:0 4px 16px oklch(0 0 0/.4);
+  --shadow-lg:0 12px 40px oklch(0 0 0/.5);
+}
+
+[data-theme="light"] {
+  --color-bg:#f0f4f8; --color-surface:#f7f9fc; --color-surface-2:#ffffff;
+  --color-surface-offset:#e8edf5; --color-divider:#d0d9e8; --color-border:#bfcbd9;
+  --color-text:#1a2233; --color-text-muted:#5a6e88; --color-text-faint:#a0b0c8;
+  --color-text-inverse:#f7f9fc;
+  --color-primary:#0284c7; --color-primary-hover:#0369a1; --color-primary-active:#075985;
+  --color-primary-highlight:#dbeafe;
+  --color-gold:#d97706;
+  --shadow-sm:0 1px 3px oklch(.3 .01 230/.08);
+  --shadow-md:0 4px 16px oklch(.3 .01 230/.1);
+  --shadow-lg:0 12px 40px oklch(.3 .01 230/.14);
+}
+
+@media (prefers-color-scheme: dark) { :root:not([data-theme]) {
+  --color-bg:#0b0e12; --color-surface:#111418; --color-surface-2:#161b22;
+  --color-surface-offset:#1c2230; --color-divider:#222a38; --color-border:#2a3447;
+  --color-text:#e2e8f0; --color-text-muted:#7d8fa8; --color-text-faint:#3d4f66;
+  --color-text-inverse:#0b0e12; --color-primary:#38bdf8; --color-primary-hover:#0ea5e9;
+  --color-primary-active:#0284c7; --color-primary-highlight:#0f2233; --color-gold:#fbbf24;
+  --shadow-sm:0 1px 2px oklch(0 0 0/.3); --shadow-md:0 4px 16px oklch(0 0 0/.4);
+  --shadow-lg:0 12px 40px oklch(0 0 0/.5);
+}}
+
+/* BASE */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;scroll-padding-top:var(--space-16)}
+body{min-height:100dvh;font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background:var(--color-bg);line-height:1.7}
+img{display:block;max-width:100%;height:auto}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.2}
+p,li{text-wrap:pretty}
+::selection{background:oklch(from var(--color-primary) l c h/.2)}
+:focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+a,button,[role="button"]{transition:color var(--transition-interactive),background var(--transition-interactive),box-shadow var(--transition-interactive)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border-width:0}
+
+/* SCROLL ANIMATIONS */
+.fade-in{opacity:1}
+@supports(animation-timeline:scroll()){
+  .fade-in{opacity:0;animation:reveal-fade linear both;animation-timeline:view();animation-range:entry 0% entry 80%}
+}
+@keyframes reveal-fade{to{opacity:1}}
+
+/* LAYOUT */
+.container{max-width:var(--content-default);margin-inline:auto;padding-inline:var(--space-6)}
+.container--wide{max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-6)}
+
+/* HEADER */
+.site-header{position:sticky;top:0;z-index:100;background:oklch(from var(--color-bg) l c h/.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--color-divider);transition:box-shadow var(--transition-interactive)}
+.site-header--scrolled{box-shadow:var(--shadow-sm)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding-block:var(--space-4);max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-6)}
+.logo{display:flex;align-items:center;gap:var(--space-3);text-decoration:none;color:var(--color-text);font-family:var(--font-display);font-size:var(--text-lg);transition:color var(--transition-interactive)}
+.logo:hover{color:var(--color-primary)}
+.nav-links{display:flex;align-items:center;gap:var(--space-6);list-style:none}
+.nav-links a{text-decoration:none;color:var(--color-text-muted);font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:color var(--transition-interactive)}
+.nav-links a:hover{color:var(--color-primary)}
+.theme-toggle{width:40px;height:40px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);background:var(--color-surface);border:1px solid var(--color-border);transition:color var(--transition-interactive),background var(--transition-interactive)}
+.theme-toggle:hover{color:var(--color-primary);background:var(--color-surface-2)}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;min-height:92vh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:var(--space-16)}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(in oklch,#0b0e12 0%,#061226 60%,#071d3a 100%)}
+[data-theme="light"] .hero-bg{background:linear-gradient(in oklch,#c8ddef 0%,#a8c8e8 60%,#88b0d8 100%)}
+.hero-img-wrap{position:absolute;inset:0;overflow:hidden}
+.hero-img-wrap img{width:100%;height:100%;object-fit:cover;opacity:.18;filter:saturate(.4) brightness(.5)}
+[data-theme="light"] .hero-img-wrap img{opacity:.15;filter:saturate(.3) brightness(1.1)}
+.scan-lines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,oklch(1 0 240/.012) 2px,oklch(1 0 240/.012) 4px);pointer-events:none}
+.hero-content{position:relative;z-index:2;max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-6)}
+.mission-badge{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);border:1px solid oklch(from var(--color-primary) l c h/.3);background:oklch(from var(--color-primary) l c h/.07);font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--space-6)}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--color-primary);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.hero h1{font-family:var(--font-display);font-size:var(--text-3xl);color:var(--color-text);margin-bottom:var(--space-6);max-width:14ch;font-weight:400}
+.hero h1 em{color:var(--color-primary);font-style:italic}
+.hero-meta{display:flex;flex-wrap:wrap;gap:var(--space-6) var(--space-8);margin-bottom:var(--space-8)}
+.meta-item{display:flex;flex-direction:column;gap:2px}
+.meta-label{font-size:var(--text-xs);color:var(--color-text-faint);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.meta-value{font-size:var(--text-sm);color:var(--color-text-muted);font-weight:500}
+.scroll-hint{display:flex;align-items:center;gap:var(--space-3);color:var(--color-text-faint);font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase}
+.scroll-line{width:36px;height:1px;background:var(--color-text-faint)}
+
+/* SPEC BAR */
+.spec-bar{background:var(--color-surface);border-top:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);padding-block:var(--space-4);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.spec-bar-inner{display:flex;gap:var(--space-8);align-items:center;max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-6);min-width:max-content}
+.spec-item{display:flex;flex-direction:column;gap:2px;min-width:72px}
+.spec-label{font-size:var(--text-xs);color:var(--color-text-faint);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.spec-value{font-size:var(--text-sm);color:var(--color-primary);font-weight:800;font-variant-numeric:tabular-nums}
+.spec-div{width:1px;height:32px;background:var(--color-divider);flex-shrink:0}
+
+/* ARTICLES */
+.article{padding-block:clamp(var(--space-12),6vw,var(--space-20))}
+.article+.article{border-top:1px solid var(--color-divider)}
+.section-eyebrow{font-size:var(--text-xs);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--space-4);display:flex;align-items:center;gap:var(--space-2)}
+.section-eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--color-primary)}
+.article-heading{font-family:var(--font-display);font-size:var(--text-2xl);font-weight:400;color:var(--color-text);margin-bottom:var(--space-6);max-width:22ch}
+.body-text{max-width:66ch}
+.body-text p{color:var(--color-text-muted);margin-bottom:var(--space-5);line-height:1.8}
+.body-text p:last-child{margin-bottom:0}
+.body-text strong{color:var(--color-text);font-weight:600}
+
+/* TWO-COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-12);align-items:start}
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.nav-links{display:none}}
+
+/* PULL QUOTE */
+.pull-quote{margin-block:var(--space-8);padding:var(--space-6) var(--space-8);border-left:3px solid var(--color-primary);background:var(--color-primary-highlight);border-radius:0 var(--radius-md) var(--radius-md) 0}
+.pull-quote p{font-family:var(--font-display);font-size:var(--text-xl);font-weight:400;color:var(--color-text);line-height:1.4;font-style:italic;margin:0!important}
+
+/* SKETCH SECTION */
+.sketch-section{padding-block:clamp(var(--space-12),6vw,var(--space-16));border-top:1px solid var(--color-divider)}
+.sketch-wrap{position:relative;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--color-border);box-shadow:var(--shadow-lg);background:var(--color-surface)}
+.sketch-overlay{position:absolute;bottom:0;left:0;right:0;padding:var(--space-6);background:linear-gradient(to top,oklch(from var(--color-bg) l c h/.95) 0%,transparent 100%)}
+.sketch-caption{font-size:var(--text-xs);color:var(--color-text-faint);letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:flex;gap:var(--space-5);padding-bottom:var(--space-8)}
+.tl-item:last-child{padding-bottom:0}
+.tl-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl-dot{width:12px;height:12px;border-radius:50%;background:var(--color-primary);border:2px solid var(--color-bg);margin-top:5px;flex-shrink:0}
+.tl-line{width:1px;background:var(--color-divider);flex:1;margin-top:var(--space-2)}
+.tl-item:last-child .tl-line{display:none}
+.tl-time{font-size:var(--text-xs);color:var(--color-primary);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:var(--space-2)}
+.tl-title{font-size:var(--text-base);font-weight:700;color:var(--color-text);margin-bottom:var(--space-2)}
+.tl-desc{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.65}
+
+/* AI CARDS */
+.ai-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:var(--space-5);margin-top:var(--space-6)}
+.ai-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-6);transition:border-color var(--transition-interactive),box-shadow var(--transition-interactive)}
+.ai-card:hover{border-color:oklch(from var(--color-primary) l c h/.4);box-shadow:var(--shadow-md)}
+.ai-layer{display:inline-block;font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary);background:var(--color-primary-highlight);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);margin-bottom:var(--space-4)}
+.ai-card h4{font-size:var(--text-base);font-weight:700;color:var(--color-text);margin-bottom:var(--space-3)}
+.ai-card ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-2)}
+.ai-card li{font-size:var(--text-sm);color:var(--color-text-muted);padding-left:var(--space-5);position:relative}
+.ai-card li::before{content:'→';position:absolute;left:0;color:var(--color-primary);font-weight:700}
+
+/* SPEC TABLE */
+.spec-table-wrap{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--color-border);box-shadow:var(--shadow-sm);margin-top:var(--space-6)}
+.spec-table{width:100%;border-collapse:collapse;font-size:var(--text-sm)}
+.spec-table thead tr{background:var(--color-surface)}
+.spec-table thead th{padding:var(--space-3) var(--space-5);text-align:left;font-size:var(--text-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted);font-weight:700;border-bottom:1px solid var(--color-border)}
+.spec-table tbody tr{background:var(--color-surface-2);transition:background var(--transition-interactive)}
+.spec-table tbody tr:nth-child(even){background:var(--color-surface)}
+.spec-table tbody tr:hover{background:var(--color-surface-offset)}
+.spec-table td{padding:var(--space-3) var(--space-5);border-bottom:1px solid var(--color-divider);vertical-align:top}
+.spec-table td:first-child{color:var(--color-text-muted);font-weight:500;white-space:nowrap}
+.spec-table td:last-child{color:var(--color-text);font-variant-numeric:tabular-nums}
+.spec-table tbody tr:last-child td{border-bottom:none}
+
+/* OUTCOMES LIST */
+.outcomes{display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-6);padding:var(--space-5);background:var(--color-surface-offset);border-radius:var(--radius-lg);border:1px solid var(--color-border)}
+.outcome-item{display:flex;gap:var(--space-3);align-items:flex-start}
+.outcome-dot{width:8px;height:8px;border-radius:50%;background:var(--color-primary);flex-shrink:0;margin-top:6px}
+.outcome-dot.gold{background:var(--color-gold)}
+.outcome-item span{font-size:var(--text-sm);color:var(--color-text-muted)}
+
+/* CONCLUSION */
+.conclusion{padding-block:clamp(var(--space-16),8vw,var(--space-24));background:var(--color-surface);border-top:1px solid var(--color-divider);text-align:center}
+.conclusion h2{font-family:var(--font-display);font-size:var(--text-2xl);font-weight:400;color:var(--color-text);margin-bottom:var(--space-6);font-style:italic}
+.conclusion p{color:var(--color-text-muted);max-width:55ch;margin-inline:auto;margin-bottom:var(--space-8)}
+.btn-primary{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-6);background:var(--color-primary);color:var(--color-text-inverse);font-weight:700;font-size:var(--text-sm);border-radius:var(--radius-full);text-decoration:none;letter-spacing:.02em;transition:background var(--transition-interactive),transform var(--transition-interactive)}
+.btn-primary:hover{background:var(--color-primary-hover);transform:translateY(-1px)}
+.btn-primary:active{background:var(--color-primary-active);transform:translateY(0)}
+
+/* FOOTER */
+.site-footer{border-top:1px solid var(--color-divider);padding-block:var(--space-8)}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:var(--space-4);max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-6)}
+.footer-brand{font-family:var(--font-display);font-size:var(--text-base);color:var(--color-text-muted)}
+.footer-brand span{color:var(--color-primary)}
+.footer-note{font-size:var(--text-xs);color:var(--color-text-faint)}
+
+/* INFOBOX */
+.info-box{margin-top:var(--space-6);padding:var(--space-5);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.7}
+.info-box strong{color:var(--color-text);font-weight:600}
+.info-box-label{font-size:var(--text-xs);color:var(--color-text-faint);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:var(--space-3)}
+</style>
+</head>
+<body>
+
+<a href="#main" class="sr-only">Skip to main content</a>
+
+<!-- ── HEADER ── -->
+<header class="site-header" id="site-header" role="banner">
+  <div class="nav-inner">
+    <a href="#" class="logo" aria-label="KANEDEV Marine Systems home">
+      <!-- Custom SVG logo: fish silhouette with titanium sphere -->
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+        <ellipse cx="14" cy="15" rx="12" ry="8" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M2 15 C6 10 12 8.5 20 11 L26 15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+        <path d="M24 10.5 L30 7.5 L28 14Z" fill="currentColor"/>
+        <circle cx="7.5" cy="13.5" r="1.4" fill="currentColor"/>
+        <circle cx="14" cy="15" r="3.5" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/>
+      </svg>
+      KANEDEV
+    </a>
+    <nav aria-label="Primary navigation">
+      <ul class="nav-links">
+        <li><a href="#mission">Mission</a></li>
+        <li><a href="#blueprint">Blueprint</a></li>
+        <li><a href="#ai-brain">AI Brain</a></li>
+        <li><a href="#timeline">Timeline</a></li>
+        <li><a href="#specs">Full Specs</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero" aria-labelledby="hero-h1">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-img-wrap" aria-hidden="true">
+    <!-- Replace src with your submarine.jpg path -->
+    <img src="assets/submarine-render.png" alt="" width="1440" height="810" loading="eager">
+  </div>
+  <div class="scan-lines" aria-hidden="true"></div>
+  <div class="hero-content">
+    <div class="mission-badge" aria-label="Mission status: active">
+      <span class="pulse" aria-hidden="true"></span>
+      Mission Report — AL-01-SRX-01
+    </div>
+    <h1 id="hero-h1">
+      Into the Rift with<br><em>Abyssal Leviathan-01</em>
+    </h1>
+    <div class="hero-meta">
+      <div class="meta-item"><span class="meta-label">Mission Date</span><span class="meta-value">12–14 July 2037</span></div>
+      <div class="meta-item"><span class="meta-label">Location</span><span class="meta-value">Shinkai Rift Zone, NW Pacific</span></div>
+      <div class="meta-item"><span class="meta-label">Max Depth</span><span class="meta-value">5,800 m</span></div>
+      <div class="meta-item"><span class="meta-label">Mission Duration</span><span class="meta-value">41.5 hours</span></div>
+      <div class="meta-item"><span class="meta-label">Crew</span><span class="meta-value">0 — Fully Autonomous</span></div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <span class="scroll-line"></span>
+      Scroll to read
+    </div>
+  </div>
+</section>
+
+<!-- ── SPEC BAR ── -->
+<div class="spec-bar" role="region" aria-label="Quick specifications">
+  <div class="spec-bar-inner">
+    <div class="spec-item"><span class="spec-label">Length</span><span class="spec-value">9.4 m</span></div>
+    <div class="spec-div" aria-hidden="true"></div>
+    <div class="spec-item"><span class="spec-label">Diameter</span><span class="spec-value">2.8 m</span></div>
+    <div class="spec-div" aria-hidden="true"></div>
+    <div class="spec-item"><span class="spec-label">Depth Rating</span><span class="spec-value">6,000 m</span></div>
+    <div class="spec-div" aria-hidden="true"></div>
+    <div class="spec-item"><span class="spec-label">Dry Mass</span><span class="spec-value">12,500 kg</span></div>
+    <div class="spec-div" aria-hidden="true"></div>
+    <div class="spec-item"><span class="spec-label">Endurance</span><span class="spec-value">48 h</span></div>
+    <div class="spec-div" aria-hidden="true"></div>
+    <div class="spec-item"><span class="spec-label">Cruise Speed</span><span class="spec-value">2.5 kn</span></div>
+    <div class="spec-div" aria-hidden="true"></div>
+    <div class="spec-item"><span class="spec-label">Hull</span><span class="spec-value">Ti-6Al-4V</span></div>
+    <div class="spec-div" aria-hidden="true"></div>
+    <div class="spec-item"><span class="spec-label">Propulsion</span><span class="spec-value">Biomimetic Tail</span></div>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ── INTRO / MISSION ── -->
+<section class="article" id="mission" aria-labelledby="mission-h2">
+  <div class="container">
+    <div class="section-eyebrow">Origin</div>
+    <h2 class="article-heading fade-in" id="mission-h2">A fish with a titanium heart</h2>
+    <div class="two-col">
+      <div class="body-text fade-in">
+        <p>Most people look up when they think about exploration. Rockets. Space stations. Moons and Mars. But on a calm night in the North Pacific, our most advanced explorer didn't leave the planet — it slipped quietly <strong>downward</strong>, into 6,000 meters of water and darkness.</p>
+        <p>When surface nations accelerated space programs and left ocean science chronically under-funded, a private consortium formed the <strong>Abyssal Initiative</strong> to finish exploring our own planet first. KANEDEV Marine Systems won the flagship contract: design a vehicle that could dive as deep as the great trenches, disturb the environment as little as possible, and operate for days without surface control.</p>
+        <p>Instead of another torpedo-shaped sub, KANEDEV's engineers borrowed from tuna, snailfish, and manta-ray physiology to create a fish-shaped hull that could <em>swim</em> rather than shove water aside with propellers. The goal was stealth, efficiency, and precise maneuvering around fragile vent fields and coral structures.</p>
+      </div>
+      <div class="fade-in">
+        <div class="pull-quote">
+          <p>"We didn't want to build a machine that goes deep. We wanted to build one that belongs there."</p>
+        </div>
+        <div class="info-box">
+          <div class="info-box-label">Hull Construction</div>
+          Inside the streamlined body sits a <strong>2.1-metre titanium sphere</strong> — a Ti-6Al-4V pressure hull with ~75–80 mm walls, rated for repeated dives to 6,000 m with a design test margin to 8,000 m. The outer composite shell handles hydrodynamics. Syntactic foam fills remaining volume for buoyancy at hadal depths.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BLUEPRINT / SKETCH ── -->
+<section class="sketch-section" id="blueprint" aria-labelledby="blueprint-h2">
+  <div class="container--wide">
+    <div class="container" style="margin-bottom:var(--space-8)">
+      <div class="section-eyebrow">Blueprint</div>
+      <h2 class="article-heading fade-in" id="blueprint-h2">Concept Design & Internal Cutaway</h2>
+    </div>
+    <div class="sketch-wrap fade-in">
+      <!-- Replace with your sketch image path -->
+      <img src="assets/submarine-sketch.png"
+           alt="Abyssal Leviathan-01 technical cutaway sketch showing the titanium pressure sphere cockpit, battery modules (BATT-01 through BATT-04), syntactic foam buoyancy blocks, electronics bay, science payload bay with water samplers, sonar dome, pectoral fins, tail actuators, and a specifications table listing length 9.4m, diameter 2.8m, dry weight 12500kg, rated depth 6000m, cruise speed 2.5kn, endurance 48hr, crew 0 autonomous"
+           width="1440" height="810" loading="lazy">
+      <div class="sketch-overlay" aria-hidden="true">
+        <p class="sketch-caption">AL-01 Cutaway — Concept Design by KANEDEV Marine Systems · Shinkai Rift Expedition 2037</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AI BRAIN ── -->
+<section class="article" id="ai-brain" aria-labelledby="ai-h2">
+  <div class="container">
+    <div class="section-eyebrow">Intelligence</div>
+    <h2 class="article-heading fade-in" id="ai-h2">The onboard scientist AI</h2>
+    <div class="body-text fade-in" style="margin-bottom:var(--space-8)">
+      <p>To support long, risky missions, the team embedded an AI "researcher pilot" inside the vehicle — software that interprets sonar, video, and chemistry data, detects anomalies, and re-plans missions on the fly. Human operators log in as mission commanders rather than joystick pilots, while the sub chooses transects, sampling points, and when to <strong>"sit still and listen."</strong></p>
+    </div>
+    <div class="ai-grid fade-in">
+      <div class="ai-card">
+        <span class="ai-layer">Layer 1</span>
+        <h4>Low-level Control</h4>
+        <ul>
+          <li>Real-time tail & fin kinematics</li>
+          <li>Depth, heading & speed stabilization</li>
+          <li>Hover micro-oscillation mode</li>
+          <li>Auxiliary thruster coordination</li>
+        </ul>
+      </div>
+      <div class="ai-card">
+        <span class="ai-layer">Layer 2</span>
+        <h4>Autonomy Core — Pilot Brain</h4>
+        <ul>
+          <li>3D sonar terrain mapping</li>
+          <li>Obstacle detection & avoidance</li>
+          <li>Energy-aware path planning</li>
+          <li>Emergency safe-return logic</li>
+        </ul>
+      </div>
+      <div class="ai-card">
+        <span class="ai-layer">Layer 3</span>
+        <h4>Science Reasoning — Researcher AI</h4>
+        <ul>
+          <li>Habitat & feature classification (ML)</li>
+          <li>Methane seep & vent anomaly detection</li>
+          <li>Biomass analysis from camera + sonar</li>
+          <li>Dynamic mission replanning</li>
+        </ul>
+      </div>
+      <div class="ai-card">
+        <span class="ai-layer">Layer 4</span>
+        <h4>Human Interface</h4>
+        <ul>
+          <li>Fully autonomous (AI-only) mode</li>
+          <li>Supervised: human approves proposals</li>
+          <li>Manned: pilot + AI copilot in sphere</li>
+          <li>Acoustic & optical comms to surface</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TIMELINE ── -->
+<section class="article" id="timeline" aria-labelledby="timeline-h2" style="background:var(--color-surface)">
+  <div class="container">
+    <div class="section-eyebrow">Mission Log</div>
+    <h2 class="article-heading fade-in" id="timeline-h2">41.5 hours in the deep</h2>
+    <div class="two-col">
+      <div class="timeline fade-in" role="list">
+        <div class="tl-item" role="listitem">
+          <div class="tl-left" aria-hidden="true"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div><div class="tl-time">T + 0 h</div><div class="tl-title">Launch from RV Capryos</div><div class="tl-desc">AL-01 released above Shinkai Rift. Controlled descent begins using trim ballast and minimal tail oscillation. Mission intent uploaded — no waypoints, only goals.</div></div>
+        </div>
+        <div class="tl-item" role="listitem">
+          <div class="tl-left" aria-hidden="true"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div><div class="tl-time">T + 3.6 h</div><div class="tl-title">Reached working depth — 5,200 m</div><div class="tl-desc">Autonomy core transitions to survey mode. Sonar dome activates. Ladder-pattern transect begins at 50–70 m standoff from the rift wall.</div></div>
+        </div>
+        <div class="tl-item" role="listitem">
+          <div class="tl-left" aria-hidden="true"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div><div class="tl-time">T + 11 h</div><div class="tl-title">Anomaly Detected — Methane Seep Field</div><div class="tl-desc">Science layer flags high backscatter + methane spike. Confidence: <strong>probable cold seep field.</strong> AI self-retasks — drops to 1 kn, initiates micro-survey. Surface team approves via acoustic link.</div></div>
+        </div>
+        <div class="tl-item" role="listitem">
+          <div class="tl-left" aria-hidden="true"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div><div class="tl-time">T + 18–22 h</div><div class="tl-title">Sampling Operations</div><div class="tl-desc">AL-01 hovers 3–4 m above the seafloor using pectoral fin micro-corrections. Niskin water samples taken across plume. Sediment cores extracted near chemosynthetic patches.</div></div>
+        </div>
+        <div class="tl-item" role="listitem">
+          <div class="tl-left" aria-hidden="true"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div><div class="tl-time">T + 41.5 h</div><div class="tl-title">Surface Recovery</div><div class="tl-desc">Battery reserve hits 35% threshold — AI initiates return automatically. Efficient cruise gait engaged. Compressed science previews transmitted. AL-01 surfaces on schedule.</div></div>
+        </div>
+      </div>
+      <div class="fade-in">
+        <div class="body-text">
+          <p>By hour 10, AL-01 had already mapped more of the Shinkai Rift segment than all previous cruises combined. Tail-driven propulsion produced smooth, low-jitter motion — sharper sonar strips and less backscatter than thruster-only designs.</p>
+          <p>The pale mats and clumped invertebrates on camera told the full story: a chemosynthetic community feeding on methane seeping out of the sediment. A new site, undescribed by science. And AL-01 found it — entirely on its own, without a single joystick override.</p>
+        </div>
+        <div class="outcomes">
+          <div style="font-size:var(--text-xs);color:var(--color-text-faint);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:var(--space-4)">Outcomes</div>
+          <div class="outcome-item"><div class="outcome-dot"></div><span>92% of planned sector mapped at high resolution</span></div>
+          <div class="outcome-item"><div class="outcome-dot"></div><span>New cold seep field discovered & characterized</span></div>
+          <div class="outcome-item"><div class="outcome-dot"></div><span>CTD profiles correlate seep locations with fault structures</span></div>
+          <div class="outcome-item"><div class="outcome-dot gold"></div><span>Zero manual overrides — full AI autonomy demonstrated</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SPEC TABLE ── -->
+<section class="article" id="specs" aria-labelledby="specs-h2">
+  <div class="container">
+    <div class="section-eyebrow">Specifications</div>
+    <h2 class="article-heading fade-in" id="specs-h2">AL-01 Technical Specification v1.0</h2>
+    <div class="fade-in">
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead><tr><th>Parameter</th><th>Value / Description</th></tr></thead>
+          <tbody>
+            <tr><td>Overall length</td><td>9.4 m</td></tr>
+            <tr><td>Max body diameter</td><td>2.8 m</td></tr>
+            <tr><td>Dry mass</td><td>~12,500 kg</td></tr>
+            <tr><td>Depth rating (operational)</td><td>6,000 m</td></tr>
+            <tr><td>Design test depth</td><td>7,500–8,000 m</td></tr>
+            <tr><td>Crew capacity</td><td>0–2 (AI-only default; optional 1 pilot + 1 observer)</td></tr>
+            <tr><td>Pressure hull material</td><td>Ti-6Al-4V titanium alloy sphere</td></tr>
+            <tr><td>Pressure hull internal diameter</td><td>~2.1 m</td></tr>
+            <tr><td>Pressure hull wall thickness</td><td>~75–80 mm</td></tr>
+            <tr><td>Outer body</td><td>Composite sandwich panels on titanium/composite frame</td></tr>
+            <tr><td>Buoyancy</td><td>Hadal-rated syntactic foam modules</td></tr>
+            <tr><td>Primary propulsion</td><td>Biomimetic segmented tail — carangiform actuators (BCF mode)</td></tr>
+            <tr><td>Control surfaces</td><td>Articulated pectoral fins + dorsal/ventral stability fins</td></tr>
+            <tr><td>Auxiliary thrusters</td><td>2–4 embedded electric thrusters for emergency/lateral control</td></tr>
+            <tr><td>Cruise speed</td><td>~2.5 knots (~1.3 m/s)</td></tr>
+            <tr><td>Sprint speed</td><td>Up to 4 knots (short duration)</td></tr>
+            <tr><td>Turning radius</td><td>≤ 1.5 × body length at cruise</td></tr>
+            <tr><td>Energy storage</td><td>~250–300 kWh usable (Li-ion or solid-state)</td></tr>
+            <tr><td>Endurance (survey)</td><td>~48 h at 2.0–2.5 kn with full sensor suite</td></tr>
+            <tr><td>Endurance (loiter)</td><td>Up to ~72 h in low-power observe mode</td></tr>
+            <tr><td>Navigation sensors</td><td>360° active/passive sonar dome, IMU, DVL, depth sensor, altimeter</td></tr>
+            <tr><td>Optical systems</td><td>4K low-light forward camera + 2× side cameras + dimmable LED arrays</td></tr>
+            <tr><td>Science payload bay</td><td>~300–400 kg; CTD, water samplers, chemical sensors, optional arm</td></tr>
+            <tr><td>Data storage</td><td>50–100 TB redundant SSD arrays</td></tr>
+            <tr><td>Communications</td><td>Long-range acoustic modem + short-range optical link</td></tr>
+            <tr><td>AI layers</td><td>Low-level control → Autonomy core → Science reasoning → Human interface</td></tr>
+            <tr><td>Safety systems</td><td>Jettisonable ballast weights; leak & pressure sensors; auto-ascent on fault</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONCLUSION ── -->
+<section class="conclusion" aria-labelledby="conclusion-h2">
+  <div class="container">
+    <h2 id="conclusion-h2" class="fade-in">"What sleeps beneath the ocean was never meant to stay hidden."</h2>
+    <p class="fade-in">AL-01 is a fictional platform built on very real engineering trends. The titanium sphere, the biomimetic tail, the autonomous science reasoning — all of it reflects the direction deep-sea technology is already heading. KANEDEV's mission: accelerate that timeline.</p>
+    <a href="#mission" class="btn-primary fade-in" aria-label="Back to the beginning of the mission story">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to the beginning
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-brand"><span>KANEDEV</span> Marine Systems · Abyssal Initiative</div>
+    <p class="footer-note">Mission AL-01-SRX-01 · Shinkai Rift Expedition 2037 · Concept by KANEDEV</p>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var t = document.querySelector('[data-theme-toggle]');
+  var r = document.documentElement;
+  var d = r.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+  r.setAttribute('data-theme', d);
+
+  function setIcon() {
+    t.innerHTML = d === 'dark'
+      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    t.setAttribute('aria-label', 'Switch to ' + (d === 'dark' ? 'light' : 'dark') + ' mode');
+  }
+
+  setIcon();
+  if (t) {
+    t.addEventListener('click', function() {
+      d = d === 'dark' ? 'light' : 'dark';
+      r.setAttribute('data-theme', d);
+      setIcon();
+    });
+  }
+
+  // Sticky header shadow on scroll
+  var header = document.getElementById('site-header');
+  window.addEventListener('scroll', function() {
+    header.classList.toggle('site-header--scrolled', window.scrollY > 20);
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
